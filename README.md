@@ -26,6 +26,7 @@ The resulting CSV file (`data.csv` by default, override with `-o` flag) has your
 ## Data Format
 
 ### Example CSV:
+(my real stats...don't judge me you pros out there...)
 ```csv
 date,day,elapsed_seconds,solved,checked,revealed
 2019-02-14,Thu,2107,1,0,0
@@ -33,6 +34,14 @@ date,day,elapsed_seconds,solved,checked,revealed
 2019-02-16,Sat,2365,1,0,0
 2019-02-17,Sun,0,0,0,0
 ```
+
+date | day | elapsed_seconds | solved | checked | revealed
+--- | --- | --- | --- | --- | ---
+2019-02-14|Thu|2107|1|0|0
+2019-02-15|Fri|2070|1|1|1
+2019-02-16|Sat|2365|1|0|0
+2019-02-17|Sun|0|0|0|0
+
 
 ### Fields in CSV:
 * **date** - The date the puzzle was published

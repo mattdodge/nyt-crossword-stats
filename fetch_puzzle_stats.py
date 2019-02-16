@@ -77,10 +77,10 @@ def get_puzzle_stats(date, cookie):
 
 def format_solve_info(solve_info):
     return {
-        'elapsed_seconds': solve_info['timeElapsed'],
-        'solved': solve_info['solved'],
-        'completed': solve_info['completed'],
-        'eligible': solve_info['eligible'],
+        'elapsed_seconds': solve_info.get('timeElapsed', 0),
+        'solved': int(solve_info.get('solved', False)),
+        'checked': int('firstChecked' in solve_info),
+        'revealed': int('firstRevealed' in solve_info),
     }
 
 
@@ -98,8 +98,8 @@ if __name__ == '__main__':
         'day',
         'elapsed_seconds',
         'solved',
-        'completed',
-        'eligible',
+        'checked',
+        'revealed',
     ]
     with open(args.output_csv, 'w') as csvfile, \
             tqdm(total=(end_date-start_date).days + 1) as pbar:

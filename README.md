@@ -50,3 +50,8 @@ date | day | elapsed_seconds | solved | checked | revealed
 * **solved** - `1` if you finished/solved the puzzle, `0` otherwise
 * **checked** - `1` if you had to check an answer on the puzzle, thus making it ineligible for streaks
 * **revealed** - `1` if you had to reveal an answer on the puzzle, thus making it ineligible for streaks
+
+## Example
+
+For an example of how to use this data, I plotted my solve times over the last ~8 months, grouped by day:
+![example chart](example_chart.png)

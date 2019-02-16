@@ -2,7 +2,7 @@ import argparse
 from csv import DictWriter
 from datetime import datetime, timedelta
 import requests
-import sys
+from tqdm import tqdm
 
 API_ROOT = 'https://nyt-games-prd.appspot.com/svc/crosswords'
 PUZZLE_INFO = API_ROOT + '/v2/puzzle/daily-{date}.json'
@@ -28,6 +28,11 @@ parser.add_argument(
     '-o', '--output-csv',
     help='The CSV file to write to',
     default='data.csv'
+)
+parser.add_argument(
+    '--strict',
+    help='Don\'t allow missing puzzles or errors',
+    action='store_true',
 )
 
 
@@ -96,13 +101,24 @@ if __name__ == '__main__':
         'completed',
         'eligible',
     ]
-    with open(args.output_csv, 'w') as csvfile:
+    with open(args.output_csv, 'w') as csvfile, \
+            tqdm(total=(end_date-start_date).days + 1) as pbar:
         writer = DictWriter(csvfile, fields)
         writer.writeheader()
+        count = 0
         while date <= end_date:
-            solve = format_solve_info(
-                get_puzzle_stats(datetime.strftime(date, DATE_FORMAT), cookie))
-            solve['date'] = datetime.strftime(date, DATE_FORMAT)
-            solve['day'] = datetime.strftime(date, '%a')
-            writer.writerow(solve)
+            date_str = datetime.strftime(date, DATE_FORMAT)
+            try:
+                solve = format_solve_info(get_puzzle_stats(date_str, cookie))
+                solve['date'] = date_str
+                solve['day'] = datetime.strftime(date, '%a')
+                writer.writerow(solve)
+                count += 1
+            except Exception:
+                # Ignore missing puzzles errors in non-strict
+                if args.strict:
+                    raise
+            pbar.update(1)
             date += timedelta(days=1)
+
+    print("{} rows written to {}".format(count, args.output_csv))

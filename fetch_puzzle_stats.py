@@ -77,7 +77,7 @@ def get_puzzle_stats(date, cookie):
     solved = solve_info.get('solved', False)
     checked = 'firstChecked' in solve_info
     revealed = 'firstRevealed' in solve_info
-    solve_date = datetime.fromtimestamp(solve_info.get('firstSolved'))
+    solve_date = datetime.fromtimestamp(solve_info.get('firstSolved', 0))
     # A puzzle is streak eligible if they didn't cheat and they solved it
     # before midnight PST (assume 8 hour offset for now, no DST)
     streak_eligible = solved and not checked and not revealed and (

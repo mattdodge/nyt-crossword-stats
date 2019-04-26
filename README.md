@@ -18,7 +18,7 @@ The NYT app shows minimal information around your streaks and average solve time
 
 Fetch all solve stats since January 1, 2019. Use your NYT email and passwords as arguments here
 ```bash
-python fetch_puzzle_stats -u your@email.com -p yourpass -s 2019-01-01
+python fetch_puzzle_stats.py -u your@email.com -p yourpass -s 2019-01-01
 ```
 
 The resulting CSV file (`data.csv` by default, override with `-o` flag) has your solve stats.
@@ -28,19 +28,19 @@ The resulting CSV file (`data.csv` by default, override with `-o` flag) has your
 ### Example CSV:
 (my real stats...don't judge me you pros out there...)
 ```csv
-date,day,elapsed_seconds,solved,checked,revealed
-2019-02-14,Thu,2107,1,0,0
-2019-02-15,Fri,2070,1,1,1
-2019-02-16,Sat,2365,1,0,0
-2019-02-17,Sun,0,0,0,0
+date,day,elapsed_seconds,solved,checked,revealed,streak_eligible
+2019-02-14,Thu,2107,1,0,0,1
+2019-02-15,Fri,2070,1,1,1,0
+2019-02-16,Sat,2365,1,0,0,1
+2019-02-17,Sun,0,0,0,0,0
 ```
 
-date | day | elapsed_seconds | solved | checked | revealed
---- | --- | --- | --- | --- | ---
-2019-02-14|Thu|2107|1|0|0
-2019-02-15|Fri|2070|1|1|1
-2019-02-16|Sat|2365|1|0|0
-2019-02-17|Sun|0|0|0|0
+date | day | elapsed_seconds | solved | checked | revealed | streak_eligible
+--- | --- | --- | --- | --- | --- | ---
+2019-02-14|Thu|2107|1|0|0|1
+2019-02-15|Fri|2070|1|1|1|0
+2019-02-16|Sat|2365|1|0|0|1
+2019-02-17|Sun|0|0|0|0|0
 
 
 ### Fields in CSV:
@@ -50,6 +50,7 @@ date | day | elapsed_seconds | solved | checked | revealed
 * **solved** - `1` if you finished/solved the puzzle, `0` otherwise
 * **checked** - `1` if you had to check an answer on the puzzle, thus making it ineligible for streaks
 * **revealed** - `1` if you had to reveal an answer on the puzzle, thus making it ineligible for streaks
+* **streak_eligible** - `1` if the puzzle counts towards your NYT streak - this means you solved without cheating (checks or reveals) on the day of the puzzle before Midnight PST
 
 ## Example
 

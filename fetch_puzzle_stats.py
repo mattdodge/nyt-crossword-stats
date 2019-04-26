@@ -63,6 +63,7 @@ def get_puzzle_stats(date, cookie):
         },
     )
     puzzle_resp.raise_for_status()
+    puzzle_date = datetime.strptime(date, DATE_FORMAT)
     puzzle_info = puzzle_resp.json().get('results')[0]
     solve_resp = requests.get(
         SOLVE_INFO.format(game_id=puzzle_info['puzzle_id']),
@@ -72,15 +73,22 @@ def get_puzzle_stats(date, cookie):
     )
     solve_resp.raise_for_status()
     solve_info = solve_resp.json().get('results')
-    return solve_info
 
+    solved = solve_info.get('solved', False)
+    checked = 'firstChecked' in solve_info
+    revealed = 'firstRevealed' in solve_info
+    solve_date = datetime.fromtimestamp(solve_info.get('firstSolved'))
+    # A puzzle is streak eligible if they didn't cheat and they solved it
+    # before midnight PST (assume 8 hour offset for now, no DST)
+    streak_eligible = solved and not checked and not revealed and (
+        solve_date <= puzzle_date + timedelta(days=1) + timedelta(hours=8))
 
-def format_solve_info(solve_info):
     return {
         'elapsed_seconds': solve_info.get('timeElapsed', 0),
-        'solved': int(solve_info.get('solved', False)),
-        'checked': int('firstChecked' in solve_info),
-        'revealed': int('firstRevealed' in solve_info),
+        'solved': int(solved),
+        'checked': int(checked),
+        'revealed': int(revealed),
+        'streak_eligible': int(streak_eligible),
     }
 
 
@@ -100,6 +108,7 @@ if __name__ == '__main__':
         'solved',
         'checked',
         'revealed',
+        'streak_eligible',
     ]
     with open(args.output_csv, 'w') as csvfile, \
             tqdm(total=(end_date-start_date).days + 1) as pbar:
@@ -109,7 +118,7 @@ if __name__ == '__main__':
         while date <= end_date:
             date_str = datetime.strftime(date, DATE_FORMAT)
             try:
-                solve = format_solve_info(get_puzzle_stats(date_str, cookie))
+                solve = get_puzzle_stats(date_str, cookie)
                 solve['date'] = date_str
                 solve['day'] = datetime.strftime(date, '%a')
                 writer.writerow(solve)

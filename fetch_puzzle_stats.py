@@ -45,6 +45,7 @@ def login(username, password):
             'password': password,
         },
         headers={
+            'User-Agent': 'Mozilla/5.0',
             'client_id': 'ios.crosswords',
         }
     )

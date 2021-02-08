@@ -21,6 +21,8 @@ Fetch all solve stats since January 1, 2019. Use your NYT email and passwords as
 python fetch_puzzle_stats.py -u your@email.com -p yourpass -s 2019-01-01
 ```
 
+NB: If your e-mail or password have some unusual characters, be sure to escape them properly, or wrap the password in quotes (`'` or `"`).
+
 The resulting CSV file (`data.csv` by default, override with `-o` flag) has your solve stats.
 
 ## Data Format

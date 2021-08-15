@@ -4,6 +4,9 @@ Fetch your NYT Crossword Puzzle solve stats and export them as CSV.
 
 The NYT app shows minimal information around your streaks and average solve times. This gets you the raw data so you can do your own analysis.
 
+## What's a GitHub?
+Not well-versed in Python or the command-line? Consider signing up for [XW Stats](https://xwstats.com). It's a free site that automatically fetches your solves and allows you to download them as a CSV.
+
 ## Requirements
 
 1. Python

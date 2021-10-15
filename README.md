@@ -24,7 +24,12 @@ Fetch all solve stats since January 1, 2019. Use your NYT email and passwords as
 python fetch_puzzle_stats.py -u your@email.com -p yourpass -s 2019-01-01
 ```
 
-NB: If your e-mail or password have some unusual characters, be sure to escape them properly, or wrap the password in quotes (`'` or `"`).
+### Login Issues
+* If you are experiencing 403 errors and you are sure your username and password are correct, you may need to provide your login cookie normally. Follow the [instruction steps here](https://xwstats.com/link) to get your cookie, then pass it as the `NYT_COOKIE` environment variable. For example:
+```
+NYT_COOKIE='1ELEHES...yDo40' python fetch_puzzle_stats.py -s '2019-01-01'
+```
+* If your e-mail or password have some unusual characters, be sure to escape them properly, or wrap the password in quotes (`'` or `"`).
 
 The resulting CSV file (`data.csv` by default, override with `-o` flag) has your solve stats.
 

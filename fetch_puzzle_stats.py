@@ -1,6 +1,7 @@
 import argparse
 from csv import DictWriter
 from datetime import datetime, timedelta
+import os
 import requests
 from tqdm import tqdm
 
@@ -11,9 +12,9 @@ DATE_FORMAT = '%Y-%m-%d'
 
 parser = argparse.ArgumentParser(description='Fetch NYT Crossword stats')
 parser.add_argument(
-    '-u', '--username', help='NYT Account Email Address', required=True)
+    '-u', '--username', help='NYT Account Email Address')
 parser.add_argument(
-    '-p', '--password', help='NYT Account Password', required=True)
+    '-p', '--password', help='NYT Account Password')
 parser.add_argument(
     '-s', '--start-date',
     help='The first date to pull from, inclusive (defaults to 30 days ago)',
@@ -95,7 +96,9 @@ def get_puzzle_stats(date, cookie):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    cookie = login(args.username, args.password)
+    cookie = os.getenv('NYT_COOKIE')
+    if not cookie:
+        cookie = login(args.username, args.password)
     start_date = datetime.strptime(args.start_date, DATE_FORMAT)
     end_date = datetime.strptime(args.end_date, DATE_FORMAT)
     print("Getting stats from {} until {}".format(

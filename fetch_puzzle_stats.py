@@ -45,9 +45,9 @@ def login(username, password):
             'password': password,
         },
         headers={
-            'User-Agent': 'Mozilla/5.0',
+            'User-Agent': 'Crosswords/20191213190708 CFNetwork/1128.0.1 Darwin/19.6.0',
             'client_id': 'ios.crosswords',
-        }
+        },
     )
     login_resp.raise_for_status()
     for cookie in login_resp.json()['data']['cookies']:

@@ -1,9 +1,7 @@
 import argparse
 import os
-import pickle
 from csv import DictWriter
 from datetime import datetime, timedelta
-import time
 
 import requests
 from dotenv import load_dotenv
@@ -87,8 +85,6 @@ def get_v3_puzzle_detail(puzzle_id, cookie):
     puzzle_resp.raise_for_status()
     puzzle_detail = puzzle_resp.json()["calcs"]
 
-    # crude rate limiting
-    time.sleep(0.25)
     return puzzle_detail
 
 
@@ -130,10 +126,6 @@ if __name__ == "__main__":
         batch_start = batch_start + timedelta(days=100)
         batch_end = batch_end + timedelta(days=100)
 
-    # A temporary file just in case it dies with those solve times
-    with open("tmp.pkl", "wb") as f:
-        pickle.dump(puzzle_overview, f)
-
     print("\nGetting puzzle solve times\n")
 
     for puzzle in tqdm(puzzle_overview):
@@ -166,5 +158,4 @@ if __name__ == "__main__":
         writer.writeheader()
         writer.writerows(puzzle_overview)
 
-    os.remove("tmp.pkl")
     print("{} rows written to {}".format(len(puzzle_overview), args.output_csv))
